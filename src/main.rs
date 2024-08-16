@@ -6,8 +6,8 @@ mod genome;
 
 fn main() {
     // Generate 23 chromosomes
-    let seq1 = genome::generate_sequence(23);
-    let seq2 = genome::generate_sequence(23);
+    let seq1: Vec<f64> = genome::generate_sequence(23);
+    let seq2: Vec<f64> = genome::generate_sequence(23);
 
     println!("Sequence1: {:?}", seq1);
     println!("Sequence2: {:?}", seq2);

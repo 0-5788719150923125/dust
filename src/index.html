@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WASM Rust Example</title>
+  </head>
+  <body>
+    <script type="module">
+      import init, { add, greet } from '../pkg/dust.js';
+
+      async function run() {
+        await init();
+
+        console.log(add(5, 3));  // Should print 8
+        console.log(greet("WASM"));  // Should print "Hello, WASM!"
+      }
+
+      run();
+    </script>
+  </body>
+</html>

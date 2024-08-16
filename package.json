@@ -1,0 +1,26 @@
+{
+  "name": "dust",
+  "version": "0.1.0",
+  "description": "something from nothing",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "parcel ./src/index.html --https --no-hmr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0-5788719150923125/dust.git"
+  },
+  "keywords": [
+    "AI"
+  ],
+  "author": "Ryan Brooks",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/0-5788719150923125/dust/issues"
+  },
+  "homepage": "https://github.com/0-5788719150923125/dust#readme",
+  "devDependencies": {
+    "parcel": "^2.12.0"
+  }
+}
