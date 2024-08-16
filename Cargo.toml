@@ -3,8 +3,16 @@ name = "dust"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
 rand = "0.8.5"
+getrandom = { version = "0.2", features = ["js"] }
+wasm-bindgen = "0.2.84"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.34"
 
 [[bin]]
 name = "dust"

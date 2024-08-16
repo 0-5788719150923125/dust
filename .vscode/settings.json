@@ -5,7 +5,6 @@
     "workbench.editor.limit.enabled": true,
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer",
-        "editor.formatOnSave": true,
         "editor.formatOnSaveMode": "file"
     }, 
 }

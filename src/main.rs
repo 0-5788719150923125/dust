@@ -1,37 +1,46 @@
-use rand::Rng;
-use std::cmp::Ordering;
-use std::io;
+// use rand::Rng;
+// use std::cmp::Ordering;
+// use std::io;
+
+mod genome;
 
 fn main() {
-    println!("Guess the number!");
+    // Generate 23 chromosomes
+    let seq1 = genome::generate_sequence(23);
+    let seq2 = genome::generate_sequence(23);
 
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    println!("Sequence1: {:?}", seq1);
+    println!("Sequence2: {:?}", seq2);
 
-    println!("The secret number is: {secret_number}");
+    // println!("Guess the number!");
 
-    loop {
-        println!("Please input your guess.");
+    // let secret_number = rand::thread_rng().gen_range(1..=100);
 
-        let mut guess = String::new();
+    // println!("The secret number is: {secret_number}");
 
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
+    // loop {
+    //     println!("Please input your guess.");
 
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
+    //     let mut guess = String::new();
 
-        println!("You guessed: {guess}");
+    //     io::stdin()
+    //         .read_line(&mut guess)
+    //         .expect("Failed to read line");
 
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
+    //     let guess: u32 = match guess.trim().parse() {
+    //         Ok(num) => num,
+    //         Err(_) => continue,
+    //     };
+
+    //     println!("You guessed: {guess}");
+
+    //     match guess.cmp(&secret_number) {
+    //         Ordering::Less => println!("Too small!"),
+    //         Ordering::Greater => println!("Too big!"),
+    //         Ordering::Equal => {
+    //             println!("You win!");
+    //             break;
+    //         }
+    //     }
+    // }
 }
