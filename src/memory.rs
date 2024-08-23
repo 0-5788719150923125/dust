@@ -14,4 +14,8 @@ impl MemoryCell {
     pub fn recall(&self) {
         println!("memories: {:?}", self.store);
     }
+
+    pub fn get_current(&self) -> &str {
+        "hello there"
+    }
 }

@@ -20,7 +20,7 @@ impl Cortex {
         thread::spawn(move || {
             while running_clone.load(Ordering::Relaxed) {
                 // Your background task logic goes here
-                println!("Background thread is working...");
+                // println!("Background thread is working...");
 
                 // Sleep for 1 second to rate-limit the loop
                 thread::sleep(Duration::from_secs(1));
