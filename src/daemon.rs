@@ -5,8 +5,11 @@ use std::sync::{
 use std::thread;
 use std::time::Duration;
 
+use crate::memory::MemoryCell;
+
 pub struct Cortex {
     running: Arc<AtomicBool>,
+    pub memory: MemoryCell,
 }
 
 impl Cortex {
@@ -24,7 +27,9 @@ impl Cortex {
             }
         });
 
-        Cortex { running }
+        let memory = MemoryCell::new();
+
+        Cortex { running, memory }
     }
 
     pub fn stop(&self) {
