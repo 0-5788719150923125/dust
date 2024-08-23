@@ -41,14 +41,14 @@ fn main() -> io::Result<()> {
     thread::spawn(move || loop {
         let current_thought = {
             let daemon = daemon_clone.lock().unwrap();
-            daemon.memory.get_current().to_string()
+            daemon.memory.get_focus().to_string()
         };
 
         execute!(
             io::stdout(),
             MoveTo(0, 0),
             Clear(ClearType::CurrentLine),
-            Print(format!("Current thought: {}", current_thought))
+            Print(format!("THOUGHT: {}", current_thought))
         )
         .unwrap();
 
@@ -56,27 +56,26 @@ fn main() -> io::Result<()> {
     });
 
     let mut input = String::new();
-    let mut output = String::new();
 
     loop {
-        execute!(io::stdout(), MoveTo(8, input_row), Print(&input))?; // Moved cursor position by 1
+        execute!(io::stdout(), MoveTo(8, input_row), Print(&input))?;
 
         if poll(Duration::from_millis(100))? {
             if let Event::Key(event) = read()? {
                 match event.code {
                     KeyCode::Enter => {
-                        output = format!("OUTPUT: {}", input.trim());
+                        let output = {
+                            let mut daemon = daemon.lock().unwrap();
+                            daemon.memory.push(input.clone());
+                            format!("OUTPUT: {}", daemon.memory.get_response().trim())
+                        };
+
                         execute!(
                             io::stdout(),
                             MoveTo(0, output_row),
                             Clear(ClearType::CurrentLine),
                             Print(&output)
                         )?;
-
-                        {
-                            let mut daemon = daemon.lock().unwrap();
-                            daemon.memory.push(input.clone());
-                        }
 
                         input.clear();
                     }
@@ -98,7 +97,7 @@ fn main() -> io::Result<()> {
             io::stdout(),
             MoveTo(0, input_row),
             Clear(ClearType::CurrentLine),
-            Print(" INPUT: "), // Note the leading space here
+            Print(" INPUT: "),
             Print(&input)
         )?;
     }
