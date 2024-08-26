@@ -1,25 +1,21 @@
 use rand::seq::SliceRandom;
 
-pub(crate) struct MemoryCell {
+pub(crate) struct DataStore {
     store: Vec<String>,
 }
 
-impl MemoryCell {
-    pub fn new() -> MemoryCell {
-        MemoryCell { store: Vec::new() }
+impl DataStore {
+    pub fn new() -> DataStore {
+        DataStore { store: Vec::new() }
     }
 
     pub fn push(&mut self, item: String) {
         self.store.push(item);
     }
 
-    // pub fn recall(&self) {
-    //     println!("memories: {:?}", self.store);
-    // }
-
     pub fn get_focus(&self) -> &str {
         if self.store.is_empty() {
-            "No memories yet"
+            ".blank"
         } else {
             self.store.choose(&mut rand::thread_rng()).unwrap()
         }

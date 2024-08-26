@@ -10,16 +10,16 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
-mod daemon;
+mod core;
 mod genome;
 mod memory;
-use daemon::Cortex;
+use core::Simulator;
 
 fn main() -> io::Result<()> {
     let _seq1: Vec<f64> = genome::generate_sequence(23);
     let _seq2: Vec<f64> = genome::generate_sequence(23);
 
-    let daemon = Arc::new(Mutex::new(Cortex::new()));
+    let daemon = Arc::new(Mutex::new(Simulator::new()));
     let daemon_clone = Arc::clone(&daemon);
 
     enable_raw_mode()?;
@@ -31,8 +31,6 @@ fn main() -> io::Result<()> {
         io::stdout(),
         Clear(ClearType::All),
         Hide,
-        MoveTo(0, 0),
-        Print("Current thought: "),
         MoveTo(0, input_row),
         Print(" INPUT: ")
     )?;
@@ -48,7 +46,7 @@ fn main() -> io::Result<()> {
             io::stdout(),
             MoveTo(0, 0),
             Clear(ClearType::CurrentLine),
-            Print(format!("THOUGHT: {}", current_thought))
+            Print(format!("ATTENTION: {}", current_thought))
         )
         .unwrap();
 

@@ -5,31 +5,30 @@ use std::sync::{
 use std::thread;
 use std::time::Duration;
 
-use crate::memory::MemoryCell;
+use crate::memory::DataStore;
 
-pub struct Cortex {
+pub struct Simulator {
     running: Arc<AtomicBool>,
-    pub memory: MemoryCell,
+    pub memory: DataStore,
 }
 
-impl Cortex {
+impl Simulator {
     pub fn new() -> Self {
         let running = Arc::new(AtomicBool::new(true));
-        let running_clone = running.clone();
+        let memory = DataStore::new();
+        let cortex = Simulator { running, memory };
+        cortex.spawn_background_thread();
+        cortex
+    }
 
+    fn spawn_background_thread(&self) {
+        let running = self.running.clone();
         thread::spawn(move || {
-            while running_clone.load(Ordering::Relaxed) {
-                // Your background task logic goes here
-                // println!("Background thread is working...");
-
-                // Sleep for 1 second to rate-limit the loop
+            while running.load(Ordering::Relaxed) {
+                // Background task logic
                 thread::sleep(Duration::from_secs(1));
             }
         });
-
-        let memory = MemoryCell::new();
-
-        Cortex { running, memory }
     }
 
     pub fn stop(&self) {
@@ -37,7 +36,7 @@ impl Cortex {
     }
 }
 
-impl Drop for Cortex {
+impl Drop for Simulator {
     fn drop(&mut self) {
         self.stop();
     }
