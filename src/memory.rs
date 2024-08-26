@@ -13,6 +13,10 @@ impl DataStore {
         self.table.push(item);
     }
 
+    pub fn get_table(&self) -> &Vec<String> {
+        &self.table
+    }
+
     pub fn get_random(&self) -> &str {
         if self.table.is_empty() {
             ".blank"

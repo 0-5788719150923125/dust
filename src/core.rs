@@ -31,6 +31,10 @@ impl Simulator {
         });
     }
 
+    fn process_data(&self) {
+        let data = self.memory.get_table();
+    }
+
     pub fn get_response(&self) -> &str {
         self.memory.get_random()
     }
