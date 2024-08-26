@@ -11,14 +11,10 @@ use std::thread;
 use std::time::Duration;
 
 mod core;
-mod genome;
 mod memory;
 use core::Simulator;
 
 fn main() -> io::Result<()> {
-    let _seq1: Vec<f64> = genome::generate_sequence(23);
-    let _seq2: Vec<f64> = genome::generate_sequence(23);
-
     let daemon = Arc::new(Mutex::new(Simulator::new()));
     let daemon_clone = Arc::clone(&daemon);
 
