@@ -31,6 +31,14 @@ impl Simulator {
         });
     }
 
+    pub fn get_response(&self) -> &str {
+        self.memory.get_random()
+    }
+
+    pub fn get_focus(&self) -> &str {
+        self.memory.get_random()
+    }
+
     pub fn stop(&self) {
         self.running.store(false, Ordering::Relaxed);
     }

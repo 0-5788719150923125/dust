@@ -35,7 +35,7 @@ fn main() -> io::Result<()> {
     thread::spawn(move || loop {
         let current_thought = {
             let daemon = daemon_clone.lock().unwrap();
-            daemon.memory.get_focus().to_string()
+            daemon.get_focus().to_string()
         };
 
         execute!(
@@ -61,7 +61,7 @@ fn main() -> io::Result<()> {
                         let output = {
                             let mut daemon = daemon.lock().unwrap();
                             daemon.memory.push(input.clone());
-                            format!("OUTPUT: {}", daemon.memory.get_response().trim())
+                            format!("OUTPUT: {}", daemon.get_response().trim())
                         };
 
                         execute!(
