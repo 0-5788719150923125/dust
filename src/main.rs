@@ -1,6 +1,6 @@
 use crossterm::{
     cursor::{Hide, MoveTo, Show},
-    event::{poll, read, Event, KeyCode},
+    event::{poll, read, Event, KeyCode, KeyModifiers},
     execute,
     style::Print,
     terminal::{disable_raw_mode, enable_raw_mode, size, Clear, ClearType},
@@ -8,7 +8,7 @@ use crossterm::{
 use std::io::{self};
 use std::sync::{Arc, Mutex};
 use std::thread;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 mod core;
 mod memory;
@@ -22,6 +22,7 @@ fn main() -> io::Result<()> {
     let (_, rows) = size()?;
     let input_row = rows - 1;
     let output_row = rows - 2;
+    let confirmation_row = rows - 3; // Line below the memory output
 
     execute!(
         io::stdout(),
@@ -50,6 +51,8 @@ fn main() -> io::Result<()> {
     });
 
     let mut input = String::new();
+    let mut ctrl_c_pressed_time: Option<Instant> = None;
+    let confirmation_window = Duration::from_secs(3); // 3 seconds to confirm exit
 
     loop {
         execute!(io::stdout(), MoveTo(8, input_row), Print(&input))?;
@@ -74,7 +77,24 @@ fn main() -> io::Result<()> {
                         input.clear();
                     }
                     KeyCode::Char(c) => {
-                        input.push(c);
+                        if event.modifiers.contains(KeyModifiers::CONTROL) && c == 'c' {
+                            if let Some(last_press) = ctrl_c_pressed_time {
+                                if last_press.elapsed() < confirmation_window {
+                                    break; // Exit the loop if confirmed within the timeframe
+                                }
+                            }
+
+                            // Prompt for confirmation
+                            ctrl_c_pressed_time = Some(Instant::now());
+                            execute!(
+                                io::stdout(),
+                                MoveTo(0, confirmation_row),
+                                Clear(ClearType::CurrentLine),
+                                Print("Press again to confirm exit")
+                            )?;
+                        } else {
+                            input.push(c);
+                        }
                     }
                     KeyCode::Backspace => {
                         input.pop();
@@ -84,6 +104,18 @@ fn main() -> io::Result<()> {
                     }
                     _ => {}
                 }
+            }
+        }
+
+        // Reset confirmation if time has passed
+        if let Some(last_press) = ctrl_c_pressed_time {
+            if last_press.elapsed() >= confirmation_window {
+                ctrl_c_pressed_time = None;
+                execute!(
+                    io::stdout(),
+                    MoveTo(0, confirmation_row),
+                    Clear(ClearType::CurrentLine)
+                )?;
             }
         }
 
